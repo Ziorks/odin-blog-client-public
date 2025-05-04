@@ -2,6 +2,7 @@ import App from "../App";
 import Home from "../pages/Home";
 import Error from "../pages/Error";
 import Login from "../pages/Login";
+import Register from "../pages/Register";
 import Settings from "../pages/Settings";
 import Post from "../pages/Post";
 import User from "../pages/User";
@@ -14,6 +15,7 @@ const routes = [
     children: [
       { index: true, element: <Home /> },
       { path: "login", element: <Login /> },
+      { path: "register", element: <Register /> },
       { path: "settings", element: <Settings /> },
       { path: "posts/:postId", element: <Post /> },
       { path: "users/:userId", element: <User /> },

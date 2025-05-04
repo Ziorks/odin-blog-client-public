@@ -9,7 +9,7 @@ function Login() {
   const [loginCredentials, setLoginCredentials] = useState(null);
 
   const { handleLogin } = useOutletContext();
-  const { data, isLoading, error } = useFetchLogin(loginCredentials);
+  const { data, isLoading, errors } = useFetchLogin(loginCredentials);
 
   useEffect(() => {
     if (data) {
@@ -26,7 +26,13 @@ function Login() {
   return (
     <>
       {isLoading && <p>Processing...</p>}
-      {error && <p>{error}</p>}
+      {errors && (
+        <ul>
+          {errors.map((error, index) => (
+            <li key={index}>{error}</li>
+          ))}
+        </ul>
+      )}
       <form onSubmit={handleLoginSubmit}>
         <div>
           <label htmlFor="username">Username: </label>
