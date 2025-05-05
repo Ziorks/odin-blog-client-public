@@ -21,7 +21,7 @@ function UserButtons({ handleLogout }) {
 function Header({ user, handleLogout }) {
   return (
     <header className={styles.header}>
-      <p className={styles.title}>Mein Bloggen</p>
+      <Link className={styles.title}>Mein Bloggen</Link>
       {user ? <UserButtons handleLogout={handleLogout} /> : <LoginButton />}
     </header>
   );
