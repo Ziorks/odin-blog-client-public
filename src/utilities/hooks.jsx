@@ -79,3 +79,38 @@ export const useFetchRegister = (registerCredentials) => {
 
   return { data, isLoading, errors };
 };
+
+export const useFetchAllPosts = () => {
+  const [data, setData] = useState(null);
+  const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState(null);
+
+  useEffect(() => {
+    let ignore = false;
+    setIsLoading(true);
+
+    axios
+      .get(`${API_HOST}/posts`)
+      .then((res) => {
+        if (!ignore) {
+          setData(res.data);
+        }
+      })
+      .catch((err) => {
+        if (err.response) {
+          setError(err.response.data.error);
+        } else {
+          setError([{ msg: "Something went wrong. Please try again." }]);
+        }
+      })
+      .finally(() => {
+        setIsLoading(false);
+      });
+
+    return () => {
+      ignore = true;
+    };
+  }, []);
+
+  return { data, isLoading, error };
+};

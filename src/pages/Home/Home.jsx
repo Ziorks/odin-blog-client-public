@@ -1,14 +1,20 @@
-import { useOutletContext } from "react-router-dom";
 import PostPreview from "../../components/PostPreview";
-// import styles from "./Home.module.css";
+import styles from "./Home.module.css";
+import { useFetchAllPosts } from "../../utilities/hooks";
 
 function Home() {
-  const { user } = useOutletContext();
+  const { data, error, isLoading } = useFetchAllPosts();
 
   return (
     <>
-      {user ? <h1>Welcom back, {user.username}</h1> : <h1>Home Page</h1>}
-      <PostPreview />
+      <h1 className={styles.header}>Blog</h1>
+      <div className={styles.previewContainer}>
+        {isLoading &&
+          new Array(32).fill().map((_, i) => <PostPreview key={i} />)}
+        {error && <p>An error occured. Try refreshing the page.</p>}
+        {data &&
+          data.posts.map((post) => <PostPreview key={post.id} post={post} />)}
+      </div>
     </>
   );
 }
