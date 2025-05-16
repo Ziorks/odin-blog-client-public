@@ -1,24 +1,10 @@
 import { Link } from "react-router-dom";
 import { format } from "date-fns";
+import { useVisibity } from "../../utilities/hooks";
 import styles from "./PostPreview.module.css";
-import { useEffect, useRef, useState } from "react";
 
 function PostPreview({ post }) {
-  const [isVisible, setIsVisible] = useState(false);
-  const domRef = useRef();
-  useEffect(() => {
-    const domElement = domRef.current;
-    const observer = new IntersectionObserver((entries) => {
-      entries.forEach((entry) => {
-        if (entry.isIntersecting) {
-          setIsVisible(true);
-          observer.unobserve(domElement);
-        }
-      });
-    });
-    observer.observe(domElement);
-    return () => observer.unobserve(domElement);
-  }, []);
+  const { domRef, isVisible } = useVisibity();
 
   return (
     <>
@@ -27,24 +13,27 @@ function PostPreview({ post }) {
           ref={domRef}
           className={`${styles.article} ${isVisible ? styles.isVisible : ""}`}
         >
-          <Link className={styles.imageLink} to={`posts/${post.id}`}>
+          <Link className={styles.imageLink} to={`/posts/${post.id}`}>
             <img
               className={styles.image}
               src="https://picsum.photos/200/300"
               alt=""
             />
           </Link>
-          <Link className={styles.titleLink} to={`posts/${post.id}`}>
+          <Link className={styles.titleLink} to={`/posts/${post.id}`}>
             <h2>{post.title}</h2>
           </Link>
           <div className={styles.divider}></div>
           <p className={styles.description}>{post.body}</p>
-          <Link className={styles.link} to={`posts/${post.id}`}>
+          <Link className={styles.link} to={`/posts/${post.id}`}>
             Read More
           </Link>
           <ul className={styles.info}>
             <li>
-              <Link to={`users/${post.authorId}`} className={styles.authorLink}>
+              <Link
+                to={`/users/${post.author.id}`}
+                className={styles.authorLink}
+              >
                 {post.author.username.toUpperCase()}
               </Link>
             </li>
@@ -57,7 +46,7 @@ function PostPreview({ post }) {
               <li>
                 <Link
                   className={styles.commentsLink}
-                  to={`posts/${post.id}/#comments`}
+                  to={`/posts/${post.id}/#comments`}
                 >
                   {`${post._count.comments} COMMENT${post._count.comments > 1 && "S"}`}
                 </Link>

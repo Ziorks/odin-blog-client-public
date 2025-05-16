@@ -1,83 +1,46 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
+import { useLocation } from "react-router-dom";
 import axios from "axios";
-const API_HOST = "http://localhost:3000";
+import { API_HOST } from "./constants";
 
-export const useFetchLogin = (loginCredentials) => {
-  const [data, setData] = useState(null);
-  const [isLoading, setIsLoading] = useState(false);
-  const [errors, setErrors] = useState(null);
+export const useScrollToAnchor = () => {
+  const location = useLocation();
+  const lastHash = useRef("");
 
   useEffect(() => {
-    if (!loginCredentials) {
-      return;
+    let anchor = null;
+    if (location.hash) {
+      lastHash.current = location.hash.slice(1);
+      anchor = document.getElementById(lastHash.current);
     }
 
-    let ignore = false;
-    setIsLoading(true);
-
-    axios
-      .post(`${API_HOST}/login`, loginCredentials)
-      .then((res) => {
-        if (!ignore) {
-          setData(res.data);
-        }
-      })
-      .catch((err) => {
-        if (err.response) {
-          setErrors(err.response.data.errors);
-        } else {
-          setErrors(["Something went wrong. Please try again."]);
-        }
-      })
-      .finally(() => {
-        setIsLoading(false);
-      });
-
-    return () => {
-      ignore = true;
-    };
-  }, [loginCredentials]);
-
-  return { data, isLoading, errors };
+    if (lastHash.current && anchor) {
+      setTimeout(() => {
+        anchor.scrollIntoView({ behavior: "smooth", block: "start" });
+        lastHash.current = "";
+      }, 400);
+    }
+  }, [location]);
 };
 
-export const useFetchRegister = (registerCredentials) => {
-  const [data, setData] = useState(null);
-  const [isLoading, setIsLoading] = useState(false);
-  const [errors, setErrors] = useState(null);
-
+export const useVisibity = () => {
+  const [isVisible, setIsVisible] = useState(false);
+  const domRef = useRef();
   useEffect(() => {
-    if (!registerCredentials) {
-      return;
-    }
-
-    let ignore = false;
-    setIsLoading(true);
-
-    axios
-      .post(`${API_HOST}/users`, registerCredentials)
-      .then((res) => {
-        if (!ignore) {
-          setData(res.data);
+    const domElement = domRef.current;
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach((entry) => {
+        if (entry.isIntersecting) {
+          setIsVisible(true);
+          observer.unobserve(domElement);
         }
-      })
-      .catch((err) => {
-        if (err.response) {
-          setErrors(err.response.data.errors);
-        } else {
-          setErrors([{ msg: "Something went wrong. Please try again." }]);
-        }
-      })
-      .finally(() => {
-        setIsLoading(false);
       });
+    });
+    observer.observe(domElement);
+    return () => observer.unobserve(domElement);
+  }, []);
 
-    return () => {
-      ignore = true;
-    };
-  }, [registerCredentials]);
-
-  return { data, isLoading, errors };
+  return { domRef, isVisible };
 };
 
 export const useFetchAllPosts = () => {
@@ -98,9 +61,9 @@ export const useFetchAllPosts = () => {
       })
       .catch((err) => {
         if (err.response) {
-          setError(err.response.data.error);
+          setError(err.response.data.message);
         } else {
-          setError([{ msg: "Something went wrong. Please try again." }]);
+          setError("Something went wrong. Please try again.");
         }
       })
       .finally(() => {
@@ -111,6 +74,76 @@ export const useFetchAllPosts = () => {
       ignore = true;
     };
   }, []);
+
+  return { data, isLoading, error };
+};
+
+export const useFetchPost = (postId) => {
+  const [data, setData] = useState(null);
+  const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState(null);
+
+  useEffect(() => {
+    let ignore = false;
+    setIsLoading(true);
+
+    axios
+      .get(`${API_HOST}/posts/${postId}`)
+      .then((res) => {
+        if (!ignore) {
+          setData(res.data.post);
+        }
+      })
+      .catch((err) => {
+        if (err.response) {
+          setError(err.response.data.message);
+        } else {
+          setError("Something went wrong. Please try again.");
+        }
+      })
+      .finally(() => {
+        setIsLoading(false);
+      });
+
+    return () => {
+      ignore = true;
+    };
+  }, [postId]);
+
+  return { data, isLoading, error };
+};
+
+export const useFetchPostComments = (postId) => {
+  const [data, setData] = useState(null);
+  const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState(null);
+
+  useEffect(() => {
+    let ignore = false;
+    setIsLoading(true);
+
+    axios
+      .get(`${API_HOST}/posts/${postId}/comments`)
+      .then((res) => {
+        if (!ignore) {
+          setData(res.data.comments);
+        }
+      })
+      .catch((err) => {
+        if (err.response) {
+          setError(err.response.data.message);
+        } else {
+          setError("Something went wrong. Please try again.");
+        }
+      })
+      .finally(() => {
+        setIsLoading(false);
+      });
+
+    return () => {
+      ignore = true;
+    };
+  }, [postId]);
 
   return { data, isLoading, error };
 };

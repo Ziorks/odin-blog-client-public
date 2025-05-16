@@ -1,38 +1,46 @@
-import { useEffect, useState } from "react";
-import { useOutletContext } from "react-router-dom";
-import { useFetchLogin } from "../../utilities/hooks";
+import { useState } from "react";
+import { Navigate, useNavigate, useOutletContext } from "react-router-dom";
+import axios from "axios";
+import { API_HOST } from "../../utilities/constants";
 // import styles from "./Login.module.css";
 
 function Login() {
+  const navigate = useNavigate();
+  const { isLoggedIn } = useOutletContext();
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
-  const [loginCredentials, setLoginCredentials] = useState(null);
-
+  const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState(null);
   const { handleLogin } = useOutletContext();
-  const { data, isLoading, errors } = useFetchLogin(loginCredentials);
-
-  useEffect(() => {
-    if (data) {
-      const { user, token } = data;
-      handleLogin({ user, token });
-    }
-  }, [data, handleLogin]);
 
   const handleLoginSubmit = (e) => {
     e.preventDefault();
-    setLoginCredentials({ username, password });
+    setError(null);
+    setIsLoading(true);
+
+    axios
+      .post(`${API_HOST}/login`, { username, password })
+      .then((res) => {
+        navigate("/", { replace: true, flushSync: true });
+        handleLogin(res.data.token);
+      })
+      .catch((err) => {
+        if (err.response) {
+          setError(err.response.data.message);
+        } else {
+          setError("Something went wrong. Please try again.");
+        }
+      })
+      .finally(() => {
+        setIsLoading(false);
+      });
   };
 
   return (
     <>
+      {isLoggedIn && <Navigate to={"/my-account"} replace />}
       {isLoading && <p>Processing...</p>}
-      {errors && (
-        <ul>
-          {errors.map((error, index) => (
-            <li key={index}>{error}</li>
-          ))}
-        </ul>
-      )}
+      {error && <p>{error}</p>}
       <form onSubmit={handleLoginSubmit}>
         <div>
           <label htmlFor="username">Username: </label>

@@ -1,34 +1,53 @@
-import { useEffect, useState } from "react";
-import { useFetchRegister } from "../../utilities/hooks";
+import { useState } from "react";
+import { Navigate, useOutletContext } from "react-router-dom";
+import axios from "axios";
+import { API_HOST } from "../../utilities/constants";
 // import styles from "./Register.module.css";
 
 function Register() {
+  const { isLoggedIn } = useOutletContext();
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [passwordConfirm, setPasswordConfirm] = useState("");
-  const [registerCredentials, setRegisterCredentials] = useState(null);
+  const [isLoading, setIsLoading] = useState(false);
+  const [errors, setErrors] = useState(null);
   const [success, setSuccess] = useState(false);
-
-  const { data, isLoading, errors } = useFetchRegister(registerCredentials);
-
-  useEffect(() => {
-    if (data) {
-      setSuccess(true);
-    }
-  }, [data]);
 
   const handleRegisterSubmit = (e) => {
     e.preventDefault();
-    setRegisterCredentials({ username, password, passwordConfirm });
+
+    setIsLoading(true);
+    setErrors(null);
+
+    axios
+      .post(`${API_HOST}/users`, { username, password, passwordConfirm })
+      .then(() => {
+        setSuccess(true);
+      })
+      .catch((err) => {
+        if (err.response) {
+          if (err.response.data.errors) {
+            setErrors(err.response.data.errors);
+          } else {
+            setErrors([{ msg: err.response.data.message }]);
+          }
+        } else {
+          setErrors([{ msg: "Something went wrong. Please try again." }]);
+        }
+      })
+      .finally(() => {
+        setIsLoading(false);
+      });
   };
 
   return (
     <>
-      {isLoading && <p>Processing...</p>}
+      {isLoggedIn && <Navigate to={"/my-account"} replace />}
       {success ? (
         <p>Your account has been created. You may login now.</p>
       ) : (
         <>
+          {isLoading && <p>Processing...</p>}
           {errors && (
             <ul>
               {errors.map((error, index) => (

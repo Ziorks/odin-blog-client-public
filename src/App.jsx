@@ -1,38 +1,36 @@
-import { Outlet, useNavigate } from "react-router-dom";
+import { Outlet } from "react-router-dom";
 import { useEffect, useState } from "react";
 import Header from "./components/Header";
 import Footer from "./components/Footer";
 
 function App() {
-  const [user, setUser] = useState(null);
-  const navigate = useNavigate();
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
 
   useEffect(() => {
-    const user = localStorage.getItem("user");
-    if (user) {
-      setUser(JSON.parse(user));
+    const token = localStorage.getItem("token");
+    if (token) {
+      setIsLoggedIn(true);
     }
   }, []);
 
   const handleLogout = () => {
     localStorage.removeItem("token");
-    localStorage.removeItem("user");
-    setUser(null);
+    setIsLoggedIn(false);
   };
 
-  const handleLogin = ({ user, token }) => {
+  const handleLogin = (token) => {
     localStorage.setItem("token", token);
-    localStorage.setItem("user", JSON.stringify(user));
-    setUser(user);
-    navigate("/", { replace: true });
+    setIsLoggedIn(() => {
+      return true;
+    });
   };
 
   return (
     <>
-      <Header user={user} handleLogout={handleLogout} />
+      <Header isLoggedIn={isLoggedIn} handleLogout={handleLogout} />
       <Outlet
         context={{
-          user,
+          isLoggedIn,
           handleLogin,
         }}
       />

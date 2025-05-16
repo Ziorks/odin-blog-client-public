@@ -1,4 +1,4 @@
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import styles from "./Header.module.css";
 
 function LoginButton() {
@@ -10,19 +10,25 @@ function LoginButton() {
 }
 
 function UserButtons({ handleLogout }) {
+  const navigate = useNavigate();
+
   return (
     <>
-      <button>My Account</button>
+      <button onClick={() => navigate("/my-account")}>My Account</button>
       <button onClick={handleLogout}>Logout</button>
     </>
   );
 }
 
-function Header({ user, handleLogout }) {
+function Header({ isLoggedIn, handleLogout }) {
   return (
     <header className={styles.header}>
       <Link className={styles.title}>Mein Bloggen</Link>
-      {user ? <UserButtons handleLogout={handleLogout} /> : <LoginButton />}
+      {isLoggedIn ? (
+        <UserButtons handleLogout={handleLogout} />
+      ) : (
+        <LoginButton />
+      )}
     </header>
   );
 }
