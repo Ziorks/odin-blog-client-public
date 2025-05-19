@@ -1,17 +1,22 @@
 import { useState } from "react";
-import { Navigate, useNavigate, useOutletContext } from "react-router-dom";
+import {
+  Link,
+  Navigate,
+  useNavigate,
+  useOutletContext,
+} from "react-router-dom";
 import axios from "axios";
 import { API_HOST } from "../../utilities/constants";
-// import styles from "./Login.module.css";
+import styles from "./Login.module.css";
 
 function Login() {
   const navigate = useNavigate();
+  const { handleLogin } = useOutletContext();
   const { isLoggedIn } = useOutletContext();
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState(null);
-  const { handleLogin } = useOutletContext();
 
   const handleLoginSubmit = (e) => {
     e.preventDefault();
@@ -39,10 +44,10 @@ function Login() {
   return (
     <>
       {isLoggedIn && <Navigate to={"/my-account"} replace />}
-      {isLoading && <p>Processing...</p>}
-      {error && <p>{error}</p>}
-      <form onSubmit={handleLoginSubmit}>
-        <div>
+      <form onSubmit={handleLoginSubmit} className={styles.form}>
+        {isLoading && <p className={styles.loading}>Processing...</p>}
+        {error && <p className={styles.error}>{error}</p>}
+        <div className={styles.fieldContainer}>
           <label htmlFor="username">Username: </label>
           <input
             type="text"
@@ -53,7 +58,7 @@ function Login() {
             required
           />
         </div>
-        <div>
+        <div className={styles.fieldContainer}>
           <label htmlFor="password">Password: </label>
           <input
             type="password"
@@ -64,10 +69,18 @@ function Login() {
             required
           />
         </div>
-        <button type="submit" disabled={isLoading}>
-          Login
-        </button>
+        <div className={styles.buttonContainer}>
+          <button type="submit" disabled={isLoading}>
+            Login
+          </button>
+        </div>
       </form>
+      <p className={styles.registerContainer}>
+        No account? No problem.{" "}
+        <Link to="/register" className={styles.registerLink}>
+          Register here
+        </Link>
+      </p>
     </>
   );
 }

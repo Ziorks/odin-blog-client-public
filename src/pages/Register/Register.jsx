@@ -1,8 +1,8 @@
 import { useState } from "react";
-import { Navigate, useOutletContext } from "react-router-dom";
+import { Link, Navigate, useOutletContext } from "react-router-dom";
 import axios from "axios";
 import { API_HOST } from "../../utilities/constants";
-// import styles from "./Register.module.css";
+import styles from "./Register.module.css";
 
 function Register() {
   const { isLoggedIn } = useOutletContext();
@@ -44,56 +44,60 @@ function Register() {
     <>
       {isLoggedIn && <Navigate to={"/my-account"} replace />}
       {success ? (
-        <p>Your account has been created. You may login now.</p>
+        <p className={styles.success}>
+          Your account has been created. You may now{" "}
+          <Link to="/login" className={styles.loginLink}>
+            login
+          </Link>
+        </p>
       ) : (
-        <>
-          {isLoading && <p>Processing...</p>}
+        <form onSubmit={handleRegisterSubmit} className={styles.form}>
+          {isLoading && <p className={styles.loading}>Processing...</p>}
           {errors && (
-            <ul>
+            <ul className={styles.error}>
               {errors.map((error, index) => (
                 <li key={index}>{error.msg}</li>
               ))}
             </ul>
           )}
-
-          <form onSubmit={handleRegisterSubmit}>
-            <div>
-              <label htmlFor="username">Username: </label>
-              <input
-                type="text"
-                name="username"
-                id="username"
-                value={username}
-                onChange={(e) => setUsername(e.target.value)}
-                required
-              />
-            </div>
-            <div>
-              <label htmlFor="password">Password: </label>
-              <input
-                type="password"
-                name="password"
-                id="password"
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-                required
-              />
-            </div>
-            <div>
-              <label htmlFor="passwordConfirm">Confirm Password: </label>
-              <input
-                type="password"
-                name="passwordConfirm"
-                id="passwordConfirm"
-                value={passwordConfirm}
-                onChange={(e) => setPasswordConfirm(e.target.value)}
-              />
-            </div>
+          <div className={styles.fieldContainer}>
+            <label htmlFor="username">Username: </label>
+            <input
+              type="text"
+              name="username"
+              id="username"
+              value={username}
+              onChange={(e) => setUsername(e.target.value)}
+              required
+            />
+          </div>
+          <div className={styles.fieldContainer}>
+            <label htmlFor="password">Password: </label>
+            <input
+              type="password"
+              name="password"
+              id="password"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              required
+            />
+          </div>
+          <div className={styles.fieldContainer}>
+            <label htmlFor="passwordConfirm">Confirm Password: </label>
+            <input
+              type="password"
+              name="passwordConfirm"
+              id="passwordConfirm"
+              value={passwordConfirm}
+              onChange={(e) => setPasswordConfirm(e.target.value)}
+            />
+          </div>
+          <div className={styles.buttonContainer}>
             <button type="submit" disabled={isLoading}>
               Register
             </button>
-          </form>
-        </>
+          </div>
+        </form>
       )}
     </>
   );

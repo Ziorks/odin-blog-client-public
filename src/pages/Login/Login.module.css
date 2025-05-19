@@ -1,3 +1,98 @@
-.login {
-  color: #fff;
+.form {
+  max-width: 800px;
+  margin: 40px auto;
+  padding-top: 1px;
+  background-color: rgba(0, 0, 0, 0.2);
+}
+
+.loading,
+.error {
+  font-size: 18px;
+  text-align: center;
+}
+
+.error {
+  color: rgba(255, 0, 0, 0.7);
+}
+
+.fieldContainer {
+  display: flex;
+  align-items: center;
+  margin: 35px 0;
+}
+
+.fieldContainer > label {
+  flex: 1;
+  font-family: sans-serif;
+  font-size: 18px;
+  text-align: right;
+  padding-right: 15px;
+}
+
+.fieldContainer > input {
+  flex: 2;
+  padding: 10px 10px;
+  margin-right: 15px;
+  background-color: rgba(255, 255, 255, 0.05);
+  color: white;
+  border: 1px solid white;
+  border-radius: 10px;
+  font-family: sans-serif;
+  font-size: 18px;
+}
+
+.fieldContainer > input:focus {
+  background-color: transparent;
+  border: 1px solid rgb(0, 153, 255);
+  outline: none;
+}
+
+.buttonContainer {
+  padding: 10px 0;
+  background-color: rgba(0, 153, 255, 0.1);
+  display: flex;
+  justify-content: center;
+}
+
+.buttonContainer > button {
+  font-family: sans-serif;
+  font-size: 20px;
+  font-weight: bold;
+  color: white;
+  background-color: rgb(0, 202, 216);
+  padding: 5px 20px;
+  border: none;
+  border-radius: 10px;
+  cursor: pointer;
+  transition: background-color 0.1s ease-out;
+}
+
+.buttonContainer > button:hover,
+.buttonContainer > button:focus {
+  background-color: rgb(24, 240, 255);
+  outline: none;
+}
+
+.registerContainer {
+  max-width: max-content;
+  margin: 40px auto;
+}
+
+.registerLink {
+  font-family: sans-serif;
+  font-size: 14px;
+  color: white;
+  background-color: rgb(53, 53, 53);
+  padding: 5px 10px;
+  border: 1px solid rgb(112, 112, 112);
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.1s ease-out;
+  text-decoration: none;
+}
+
+.registerLink:hover,
+.registerLink:focus {
+  background-color: rgb(68, 68, 68);
+  outline: none;
 }
