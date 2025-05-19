@@ -12,7 +12,7 @@ function Post() {
     <>
       <main>
         {isLoading && <p>Loading...</p>}
-        {error && <p>There was an error. Please try again.</p>}
+        {error && <p>{error}</p>}
         {post && (
           <>
             <div className={styles.hero}>
