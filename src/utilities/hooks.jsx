@@ -147,3 +147,108 @@ export const useFetchPostComments = (postId) => {
 
   return { data, isLoading, error };
 };
+
+export const useFetchUser = (userId) => {
+  const [data, setData] = useState(null);
+  const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState(null);
+
+  useEffect(() => {
+    let ignore = false;
+    setIsLoading(true);
+
+    axios
+      .get(`${API_HOST}/users/${userId}`)
+      .then((res) => {
+        if (!ignore) {
+          setData(res.data.user);
+        }
+      })
+      .catch((err) => {
+        if (err.response) {
+          setError(err.response.data.message);
+        } else {
+          setError("Something went wrong. Please try again.");
+        }
+      })
+      .finally(() => {
+        setIsLoading(false);
+      });
+
+    return () => {
+      ignore = true;
+    };
+  }, [userId]);
+
+  return { data, isLoading, error };
+};
+
+export const useFetchUserPosts = (userId) => {
+  const [data, setData] = useState(null);
+  const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState(null);
+
+  useEffect(() => {
+    let ignore = false;
+    setIsLoading(true);
+
+    axios
+      .get(`${API_HOST}/users/${userId}/posts`)
+      .then((res) => {
+        if (!ignore) {
+          setData(res.data.posts);
+        }
+      })
+      .catch((err) => {
+        if (err.response) {
+          setError(err.response.data.message);
+        } else {
+          setError("Something went wrong. Please try again.");
+        }
+      })
+      .finally(() => {
+        setIsLoading(false);
+      });
+
+    return () => {
+      ignore = true;
+    };
+  }, [userId]);
+
+  return { data, isLoading, error };
+};
+
+export const useFetchUserComments = (userId) => {
+  const [data, setData] = useState(null);
+  const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState(null);
+
+  useEffect(() => {
+    let ignore = false;
+    setIsLoading(true);
+
+    axios
+      .get(`${API_HOST}/users/${userId}/comments`)
+      .then((res) => {
+        if (!ignore) {
+          setData(res.data.comments);
+        }
+      })
+      .catch((err) => {
+        if (err.response) {
+          setError(err.response.data.message);
+        } else {
+          setError("Something went wrong. Please try again.");
+        }
+      })
+      .finally(() => {
+        setIsLoading(false);
+      });
+
+    return () => {
+      ignore = true;
+    };
+  }, [userId]);
+
+  return { data, isLoading, error };
+};

@@ -1,3 +1,87 @@
-.user {
-  color: #fff;
+.postsList,
+.commentsList {
+  list-style-type: none;
+}
+
+.post,
+.comment {
+  margin-bottom: 10px;
+}
+
+.post::after,
+.post:first-child::before,
+.comment::after,
+.comment:first-child::before {
+  display: block;
+  position: relative;
+  content: "";
+  height: 1px;
+  background-color: rgba(255, 255, 255, 0.35);
+}
+
+.post:after,
+.comment:after {
+  bottom: -5px;
+}
+
+.post:first-child::before,
+.comment:first-child::before {
+  top: -5px;
+}
+
+.postLink {
+  display: block;
+  color: white;
+  text-decoration: none;
+  padding: 10px 20px;
+  border-radius: 10px;
+}
+
+.postLink:hover {
+  background-color: rgba(255, 255, 255, 0.05);
+}
+
+.commentPost {
+  margin-bottom: 15px;
+}
+
+.time {
+  font-size: 12px;
+  padding-left: 5px;
+  margin-bottom: 10px;
+}
+
+.time::before {
+  content: "•";
+  margin-right: 4px;
+}
+
+.mainContainer {
+  max-width: 800px;
+  margin: 40px auto;
+}
+
+.buttonContainer {
+  margin: 15px 0;
+  padding-bottom: 15px;
+  display: flex;
+  gap: 5px;
+}
+
+.selectionButton {
+  cursor: pointer;
+  border: none;
+  padding: 10px 15px;
+  background-color: unset;
+  color: white;
+  font-size: 16px;
+}
+
+.selectionButton:hover {
+  text-decoration: underline;
+}
+
+.selectionButton.selected {
+  border-radius: 25px;
+  background-color: rgba(211, 211, 211, 0.25);
 }
