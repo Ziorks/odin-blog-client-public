@@ -4,33 +4,31 @@ import Header from "./components/Header";
 import Footer from "./components/Footer";
 
 function App() {
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [user, setUser] = useState(null);
 
   useEffect(() => {
-    const token = localStorage.getItem("token");
-    if (token) {
-      setIsLoggedIn(true);
+    const user = localStorage.getItem("user");
+    if (user) {
+      setUser(JSON.parse(user));
     }
   }, []);
 
   const handleLogout = () => {
-    localStorage.removeItem("token");
-    setIsLoggedIn(false);
+    localStorage.removeItem("user");
+    setUser(null);
   };
 
-  const handleLogin = (token) => {
-    localStorage.setItem("token", token);
-    setIsLoggedIn(() => {
-      return true;
-    });
+  const handleLogin = (user) => {
+    localStorage.setItem("user", JSON.stringify(user));
+    setUser(user);
   };
 
   return (
     <>
-      <Header isLoggedIn={isLoggedIn} handleLogout={handleLogout} />
+      <Header user={user} handleLogout={handleLogout} />
       <Outlet
         context={{
-          isLoggedIn,
+          user,
           handleLogin,
         }}
       />

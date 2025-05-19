@@ -51,7 +51,8 @@ function UserComments({ userId }) {
             <li key={comment.id} className={styles.comment}>
               <Link
                 to={`/posts/${comment.post.id}#comments`}
-                className={styles.postLink}>
+                className={styles.postLink}
+              >
                 <p className={styles.commentPost}>
                   {comment.post.title}
                   <span className={styles.time}>
@@ -104,12 +105,14 @@ function User() {
           <div className={styles.buttonContainer}>
             <button
               onClick={handlePostsSelect}
-              className={`${styles.selectionButton} ${selection === SELECTIONS.POSTS ? styles.selected : ""}`}>
+              className={`${styles.selectionButton} ${selection === SELECTIONS.POSTS ? styles.selected : ""}`}
+            >
               Posts
             </button>
             <button
               onClick={handleCommentsSelect}
-              className={`${styles.selectionButton} ${selection === SELECTIONS.COMMENTS ? styles.selected : ""}`}>
+              className={`${styles.selectionButton} ${selection === SELECTIONS.COMMENTS ? styles.selected : ""}`}
+            >
               Comments
             </button>
           </div>

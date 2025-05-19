@@ -12,7 +12,7 @@ import styles from "./Login.module.css";
 function Login() {
   const navigate = useNavigate();
   const { handleLogin } = useOutletContext();
-  const { isLoggedIn } = useOutletContext();
+  const { user } = useOutletContext();
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [isLoading, setIsLoading] = useState(false);
@@ -27,7 +27,9 @@ function Login() {
       .post(`${API_HOST}/login`, { username, password })
       .then((res) => {
         navigate("/", { replace: true, flushSync: true });
-        handleLogin(res.data.token);
+        const { id, username } = res.data.user;
+        const user = { id, username, token: res.data.token };
+        handleLogin(user);
       })
       .catch((err) => {
         if (err.response) {
@@ -43,7 +45,7 @@ function Login() {
 
   return (
     <>
-      {isLoggedIn && <Navigate to={"/my-account"} replace />}
+      {user && <Navigate to={"/my-account"} replace />}
       <form onSubmit={handleLoginSubmit} className={styles.form}>
         {isLoading && <p className={styles.loading}>Processing...</p>}
         {error && <p className={styles.error}>{error}</p>}

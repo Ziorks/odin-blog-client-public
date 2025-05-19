@@ -20,15 +20,11 @@ function UserButtons({ handleLogout }) {
   );
 }
 
-function Header({ isLoggedIn, handleLogout }) {
+function Header({ user, handleLogout }) {
   return (
     <header className={styles.header}>
       <Link className={styles.title}>mein Blog</Link>
-      {isLoggedIn ? (
-        <UserButtons handleLogout={handleLogout} />
-      ) : (
-        <LoginButton />
-      )}
+      {user ? <UserButtons handleLogout={handleLogout} /> : <LoginButton />}
     </header>
   );
 }

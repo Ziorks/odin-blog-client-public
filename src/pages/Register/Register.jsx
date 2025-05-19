@@ -5,7 +5,7 @@ import { API_HOST } from "../../utilities/constants";
 import styles from "./Register.module.css";
 
 function Register() {
-  const { isLoggedIn } = useOutletContext();
+  const { user } = useOutletContext();
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [passwordConfirm, setPasswordConfirm] = useState("");
@@ -42,7 +42,7 @@ function Register() {
 
   return (
     <>
-      {isLoggedIn && <Navigate to={"/my-account"} replace />}
+      {user && <Navigate to={"/my-account"} replace />}
       {success ? (
         <p className={styles.success}>
           Your account has been created. You may now{" "}
