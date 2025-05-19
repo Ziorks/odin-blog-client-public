@@ -7,7 +7,7 @@ import { API_HOST } from "../../utilities/constants";
 import styles from "./CommentSection.module.css";
 
 function NewCommentForm({ postId }) {
-  const { isLoggedIn } = useOutletContext();
+  const { user } = useOutletContext();
   const [commentBody, setCommentBody] = useState("");
   const [hasPosted, setHasPosted] = useState(false);
   const [error, setError] = useState(null);
@@ -15,7 +15,6 @@ function NewCommentForm({ postId }) {
 
   const handleCommentSubmit = (e) => {
     e.preventDefault();
-    const token = localStorage.getItem("token");
     const payload = { body: commentBody, postId };
     setIsLoading(true);
     setError(null);
@@ -23,7 +22,7 @@ function NewCommentForm({ postId }) {
     axios
       .post(`${API_HOST}/comments`, payload, {
         headers: {
-          Authorization: token,
+          Authorization: user.token,
         },
       })
       .then(() => {
@@ -47,7 +46,7 @@ function NewCommentForm({ postId }) {
         <p>Your comment has been posted!</p>
       ) : isLoading ? (
         <p>Posting your comment...</p>
-      ) : isLoggedIn ? (
+      ) : user ? (
         <>
           {error && <p>{error}</p>}
           <form onSubmit={handleCommentSubmit}>
@@ -72,25 +71,176 @@ function NewCommentForm({ postId }) {
 }
 
 function Comment({ comment, postAuthorId }) {
+  const { user } = useOutletContext();
+  const [isEditing, setIsEditing] = useState(false);
+  const [editBody, setEditBody] = useState("");
+  const [isEdited, setIsEdited] = useState(false);
+  const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
+  const [isDeleted, setIsDeleted] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState(null);
+
+  function handleEditClick() {
+    setIsEditing(true);
+    setEditBody(comment.body);
+  }
+
+  function handleEditCancel() {
+    setIsEditing(false);
+    setError(null);
+  }
+
+  function handleEditSubmit(e) {
+    e.preventDefault();
+    setIsLoading(true);
+    setError(null);
+    const payload = { body: editBody };
+
+    axios
+      .put(`${API_HOST}/comments/${comment.id}`, payload, {
+        headers: { Authorization: user.token },
+      })
+      .then(() => {
+        setIsEditing(false);
+        setIsEdited(true);
+      })
+      .catch((err) => {
+        if (err.response) {
+          setError(err.response.data.message);
+        } else {
+          setError("Something went wrong. Please try again.");
+        }
+      })
+      .finally(() => {
+        setIsLoading(false);
+      });
+  }
+
+  function handleDeleteClick() {
+    setShowDeleteConfirm(true);
+  }
+
+  function handleDeleteConfirm() {
+    setIsLoading(true);
+    setError(null);
+
+    axios
+      .delete(`${API_HOST}/comments/${comment.id}`, {
+        headers: { Authorization: user.token },
+      })
+      .then(() => {
+        setShowDeleteConfirm(false);
+        setIsDeleted(true);
+      })
+      .catch((err) => {
+        if (err.response) {
+          setError(err.response.data.message);
+        } else {
+          setError("Something went wrong. Please try again.");
+        }
+      })
+      .finally(() => {
+        setIsLoading(false);
+      });
+  }
+
+  function handleDeleteCancel() {
+    setShowDeleteConfirm(false);
+    setError(null);
+  }
+
   return (
     <li className={styles.commentContainer}>
       <div className={styles.commentInfo}>
-        <div>
-          <Link
-            to={`/users/${comment.author.id}`}
-            className={styles.authorLink}
-          >
-            {comment.author.username}
-          </Link>
-          {postAuthorId === comment.author.id && (
-            <span className={styles.authorTag}>Author</span>
+        {isDeleted ? (
+          <p>Deleted</p>
+        ) : (
+          <>
+            <div>
+              <Link
+                to={`/users/${comment.author.id}`}
+                className={styles.authorLink}
+              >
+                {comment.author.username}
+              </Link>
+              {postAuthorId === comment.author.id && (
+                <span className={styles.authorTag}>Author</span>
+              )}
+            </div>
+            <time dateTime={comment.createdAt} className={styles.timestamp}>
+              {format(comment.createdAt, "do MMMM yyyy kk:mm")}
+            </time>
+          </>
+        )}
+      </div>
+      {isEditing ? (
+        <form onSubmit={handleEditSubmit}>
+          <textarea
+            className={styles.editedComment}
+            name="editedComment"
+            id="editedComment"
+            value={editBody}
+            onChange={(e) => {
+              setEditBody(e.target.value);
+            }}
+          />
+          <div className={styles.editActions}>
+            <p>
+              {isLoading && "Saving..."}
+              {error}
+            </p>
+            <button disabled={isLoading} onClick={handleEditCancel}>
+              Cancel
+            </button>
+            <button type="submit" disabled={isLoading}>
+              Save
+            </button>
+          </div>
+        </form>
+      ) : (
+        <p className={styles.commentBody}>
+          {isEdited
+            ? "Comment edited successfully"
+            : isDeleted
+              ? "Comment deleted successfully"
+              : comment.body}
+        </p>
+      )}
+      {user?.id === comment.author.id && (
+        <div className={styles.actionsContainer}>
+          {showDeleteConfirm ? (
+            <>
+              {isLoading && <p>Deleting...</p>}
+              {error && <p>{error}</p>}
+              <p className={styles.deleteConfirm}>
+                Are you sure you want to delete this comment?
+                <button disabled={isLoading} onClick={handleDeleteCancel}>
+                  No
+                </button>
+                <button disabled={isLoading} onClick={handleDeleteConfirm}>
+                  Yes
+                </button>
+              </p>
+            </>
+          ) : (
+            !isDeleted &&
+            !isEditing &&
+            !isEdited && (
+              <>
+                <button className={styles.editButton} onClick={handleEditClick}>
+                  Edit
+                </button>
+                <button
+                  className={styles.deleteButton}
+                  onClick={handleDeleteClick}
+                >
+                  Delete
+                </button>
+              </>
+            )
           )}
         </div>
-        <time dateTime={comment.createdAt} className={styles.timestamp}>
-          {format(comment.createdAt, "do MMMM yyyy kk:mm")}
-        </time>
-      </div>
-      <p className={styles.commentBody}>{comment.body}</p>
+      )}
     </li>
   );
 }
