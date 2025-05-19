@@ -57,7 +57,8 @@ function NewCommentForm({ postId }) {
               id="newComment"
               placeholder="Join the conversation"
               value={commentBody}
-              onChange={(e) => setCommentBody(e.target.value)}></textarea>
+              onChange={(e) => setCommentBody(e.target.value)}
+            ></textarea>
             <button type="submit" className={styles.commentSubmitBtn}>
               Post Comment
             </button>
@@ -75,7 +76,10 @@ function Comment({ comment, postAuthorId }) {
     <li className={styles.commentContainer}>
       <div className={styles.commentInfo}>
         <div>
-          <Link to={`/users/${comment.authorId}`} className={styles.authorLink}>
+          <Link
+            to={`/users/${comment.author.id}`}
+            className={styles.authorLink}
+          >
             {comment.author.username}
           </Link>
           {postAuthorId === comment.author.id && (
