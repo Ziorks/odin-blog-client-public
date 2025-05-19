@@ -1,3 +1,8 @@
 .footer {
-  color: #a8b;
+  text-align: center;
+  font-size: 6px;
+  padding: 10px 0;
+  border-top: 1px solid rgba(255, 255, 255, 0.3);
+  color: rgb(202, 216, 235);
+  background-color: #1f1f1f;
 }
