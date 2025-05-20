@@ -41,7 +41,7 @@ function Register() {
   };
 
   return (
-    <>
+    <main>
       {user && <Navigate to={"/my-account"} replace />}
       {success ? (
         <p className={styles.success}>
@@ -99,7 +99,7 @@ function Register() {
           </div>
         </form>
       )}
-    </>
+    </main>
   );
 }
 

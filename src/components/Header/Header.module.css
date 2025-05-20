@@ -1,32 +1,62 @@
 .header {
-  border-bottom: 1px solid white;
+  border-bottom: 1px solid rgb(138, 138, 138);
+  padding: 0 15px;
+}
+
+.container {
   display: flex;
-  padding: 25px 15px;
+  justify-content: space-between;
+  align-items: flex-end;
+  max-width: 1400px;
+  margin: 0 auto;
 }
 
 .title {
   color: rgb(168, 29, 168);
   font-family: sans-serif;
-  font-size: 3rem;
-  flex-grow: 1;
+  font-size: 28px;
+  margin: 20px 0;
 }
 
-.loginButton {
-  display: flex;
-  justify-content: center;
-  align-items: center;
+.loginButton,
+.myAccountButton,
+.logoutButton {
   font-family: sans-serif;
-  font-size: 2rem;
-  padding: 0px 15px;
-  background-color: rgb(168, 29, 168);
-  color: rgb(61, 8, 87);
-  border-radius: 15px;
-  border: 1px solid rgb(168, 29, 168);
-  text-decoration: none;
+  font-size: 24px;
+  padding: 8px 20px;
+  background-color: rgb(77, 12, 114);
+  color: white;
   cursor: pointer;
 }
 
+.loginButton,
+.signupButton {
+  display: inline-block;
+  text-decoration: none;
+}
+
 .loginButton:hover {
-  background-color: rgb(61, 8, 87);
-  color: rgb(168, 29, 168);
+  background-color: rgb(116, 20, 116);
+}
+
+.signupButton {
+  font-size: 20px;
+  color: white;
+  padding: 8px 20px;
+}
+
+.signupButton:hover {
+  text-decoration: underline;
+}
+
+.myAccountButton,
+.logoutButton {
+  background-color: transparent;
+  font-size: 18px;
+  border: none;
+}
+
+.myAccountButton:hover,
+.logoutButton:hover {
+  background-color: grey;
 }

@@ -96,11 +96,11 @@ function User() {
   }
 
   return (
-    <>
+    <main>
       {isLoading && <p>Loading...</p>}
       {error && <p>{error}</p>}
       {user && (
-        <main className={styles.mainContainer}>
+        <div className={styles.mainContainer}>
           <h1>{user.username}</h1>
           <div className={styles.buttonContainer}>
             <button
@@ -120,9 +120,9 @@ function User() {
           {selection === SELECTIONS.COMMENTS && (
             <UserComments userId={userId} />
           )}
-        </main>
+        </div>
       )}
-    </>
+    </main>
   );
 }
 

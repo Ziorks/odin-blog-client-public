@@ -6,16 +6,16 @@ function Home() {
   const { data, error, isLoading } = useFetchAllPosts();
 
   return (
-    <>
+    <main>
       <h1 className={styles.header}>Blog</h1>
       <div className={styles.previewContainer}>
         {isLoading &&
-          new Array(32).fill().map((_, i) => <PostPreview key={i} />)}
+          new Array(8).fill().map((_, i) => <PostPreview key={i} />)}
         {error && <p>An error occured. Try refreshing the page.</p>}
         {data &&
           data.posts.map((post) => <PostPreview key={post.id} post={post} />)}
       </div>
-    </>
+    </main>
   );
 }
 

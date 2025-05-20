@@ -44,7 +44,7 @@ function Login() {
   };
 
   return (
-    <>
+    <main>
       {user && <Navigate to={"/my-account"} replace />}
       <form onSubmit={handleLoginSubmit} className={styles.form}>
         {isLoading && <p className={styles.loading}>Processing...</p>}
@@ -83,7 +83,7 @@ function Login() {
           Register here
         </Link>
       </p>
-    </>
+    </main>
   );
 }
 
