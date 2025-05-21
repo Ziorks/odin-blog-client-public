@@ -157,14 +157,20 @@ function Comment({ comment, postAuthorId }) {
         ) : (
           <>
             <div>
-              <Link
-                to={`/users/${comment.author.id}`}
-                className={styles.authorLink}
-              >
-                {comment.author.username}
-              </Link>
-              {postAuthorId === comment.author.id && (
-                <span className={styles.authorTag}>Author</span>
+              {comment.author ? (
+                <>
+                  <Link
+                    to={`/users/${comment.author.id}`}
+                    className={styles.authorLink}
+                  >
+                    {comment.author.username}
+                  </Link>
+                  {postAuthorId === comment.author.id && (
+                    <span className={styles.authorTag}>Author</span>
+                  )}
+                </>
+              ) : (
+                <p>&#91;deleted&#93;</p>
               )}
             </div>
             <time dateTime={comment.createdAt} className={styles.timestamp}>
@@ -206,7 +212,7 @@ function Comment({ comment, postAuthorId }) {
               : comment.body}
         </p>
       )}
-      {user?.id === comment.author.id && (
+      {user && user.id === comment.author?.id && (
         <div className={styles.actionsContainer}>
           {showDeleteConfirm ? (
             <>
