@@ -16,19 +16,11 @@ function Post() {
         <>
           <div className={styles.hero}>
             <figure className={styles.imageContainer}>
-              <img
-                className={styles.image}
-                src="https://picsum.photos/1920/1080"
-                alt=""
-              />
+              <img className={styles.image} src={post.imageLink} alt="" />
             </figure>
             <header className={styles.header}>
               <h1 className={styles.title}>{post.title}</h1>
-              <p className={styles.description}>
-                Description Description Description Description Description
-                Description Description Description Description Description
-                Description Description Description Description Description
-              </p>
+              <p className={styles.description}>{post.description}</p>
               <ul className={styles.info}>
                 <li>
                   <Link
@@ -51,6 +43,14 @@ function Post() {
                   </li>
                 )}
               </ul>
+              {post.editedAt !== post.createdAt && (
+                <p className={styles.updatedAt}>
+                  Last Updated:{" "}
+                  <time dateTime={post.editedAt}>
+                    {format(post.createdAt, "do MMMM yyyy")}
+                  </time>
+                </p>
+              )}
             </header>
           </div>
           <article className={styles.article}>{post.body}</article>

@@ -173,9 +173,22 @@ function Comment({ comment, postAuthorId }) {
                 <p>&#91;deleted&#93;</p>
               )}
             </div>
-            <time dateTime={comment.createdAt} className={styles.timestamp}>
-              {format(comment.createdAt, "do MMMM yyyy kk:mm")}
-            </time>
+            <div>
+              <p className={styles.timestamp}>
+                Posted:{" "}
+                <time dateTime={comment.createdAt}>
+                  {format(comment.createdAt, "do MMMM yyyy kk:mm")}
+                </time>
+              </p>
+              {comment.createdAt !== comment.editedAt && (
+                <p className={styles.timestamp}>
+                  Last Edited:{" "}
+                  <time dateTime={comment.editedAt}>
+                    {format(comment.editedAt, "do MMMM yyyy kk:mm")}
+                  </time>
+                </p>
+              )}
+            </div>
           </>
         )}
       </div>
@@ -265,18 +278,22 @@ function CommentSection({ postAuthorId, postId }) {
         <>
           <div className={styles.commentsHead}>
             <p className={styles.commentsCount}>
-              {`${comments.length} COMMENT${comments.length > 1 && "S"}`}{" "}
+              {`${comments.length} COMMENT${comments.length === 1 ? "" : "S"}`}
             </p>
           </div>
-          <ol className={styles.commentsContainer}>
-            {comments.map((comment) => (
-              <Comment
-                key={comment.id}
-                comment={comment}
-                postAuthorId={postAuthorId}
-              />
-            ))}
-          </ol>
+          {comments.length > 0 ? (
+            <ol className={styles.commentsContainer}>
+              {comments.map((comment) => (
+                <Comment
+                  key={comment.id}
+                  comment={comment}
+                  postAuthorId={postAuthorId}
+                />
+              ))}
+            </ol>
+          ) : (
+            <p>There are no comments</p>
+          )}
         </>
       )}
     </div>

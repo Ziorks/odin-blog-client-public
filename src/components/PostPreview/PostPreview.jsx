@@ -14,17 +14,13 @@ function PostPreview({ post }) {
           className={`${styles.article} ${isVisible ? styles.isVisible : ""}`}
         >
           <Link className={styles.imageLink} to={`/posts/${post.id}`}>
-            <img
-              className={styles.image}
-              src="https://picsum.photos/200/300"
-              alt=""
-            />
+            <img className={styles.image} src={post.imageLink} alt="" />
           </Link>
           <Link className={styles.titleLink} to={`/posts/${post.id}`}>
             <h2>{post.title}</h2>
           </Link>
           <div className={styles.divider}></div>
-          <p className={styles.description}>{post.body}</p>
+          <p className={styles.description}>{post.description}</p>
           <Link className={styles.link} to={`/posts/${post.id}`}>
             Read More
           </Link>

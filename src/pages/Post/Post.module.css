@@ -68,6 +68,10 @@
   all: unset;
 }
 
+.updatedAt {
+  font-family: sans-serif;
+}
+
 .authorLink {
   font-weight: bold;
 }

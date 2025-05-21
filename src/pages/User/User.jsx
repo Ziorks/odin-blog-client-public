@@ -26,7 +26,7 @@ function UserPosts({ userId }) {
                     addSuffix: true,
                   })}
                 </p>
-                <p>{post.body}</p>
+                <p>{post.description}</p>
               </Link>
             </li>
           ))}
@@ -60,6 +60,14 @@ function UserComments({ userId }) {
                       addSuffix: true,
                     })}
                   </span>
+                  {comment.editedAt !== comment.createdAt && (
+                    <span className={styles.time}>
+                      Last edited:{" "}
+                      {formatDistanceToNowStrict(comment.editedAt, {
+                        addSuffix: true,
+                      })}
+                    </span>
+                  )}
                 </p>
                 <p>{comment.body}</p>
               </Link>
