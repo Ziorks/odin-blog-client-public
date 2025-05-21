@@ -30,6 +30,7 @@ function App() {
         context={{
           user,
           handleLogin,
+          handleLogout,
         }}
       />
       <Footer />
