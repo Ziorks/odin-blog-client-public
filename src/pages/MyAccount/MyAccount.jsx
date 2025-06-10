@@ -95,10 +95,10 @@ function DeleteAccountSection() {
 
 function UpdateUserForm() {
   const { user, handleLogin } = useOutletContext();
-  const [newUsername, setNewUsername] = useState(user.username);
+  const [username, setUsername] = useState(user.username);
   const [oldPassword, setOldPassword] = useState("");
-  const [newPassword, setNewPassword] = useState("");
-  const [newPasswordConfirm, setNewPasswordConfirm] = useState("");
+  const [password, setPassword] = useState("");
+  const [passwordConfirm, setPasswordConfirm] = useState("");
   const [errors, setErrors] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
   const [hasUpdated, setHasUpdated] = useState(false);
@@ -109,10 +109,10 @@ function UpdateUserForm() {
     setIsLoading(true);
     setHasUpdated(false);
     const payload = {
-      newUsername,
+      username,
       oldPassword,
-      newPassword,
-      newPasswordConfirm,
+      password,
+      passwordConfirm,
     };
 
     axios
@@ -124,6 +124,9 @@ function UpdateUserForm() {
         const { token, id } = user;
         const { username } = res.data.user;
         const updatedUser = { username, id, token };
+        setOldPassword("");
+        setPassword("");
+        setPasswordConfirm("");
         handleLogin(updatedUser);
       })
       .catch((err) => {
@@ -148,13 +151,13 @@ function UpdateUserForm() {
       <div>
         <h3 className={styles.formHeading}>Username</h3>
         <div className={styles.fieldContainer}>
-          <label htmlFor="newUsername">Username: </label>
+          <label htmlFor="username">Username: </label>
           <input
             type="text"
-            name="newUsername"
-            id="newUsername"
-            value={newUsername}
-            onChange={(e) => setNewUsername(e.target.value)}
+            name="username"
+            id="username"
+            value={username}
+            onChange={(e) => setUsername(e.target.value)}
             required
           />
         </div>
@@ -172,23 +175,23 @@ function UpdateUserForm() {
           />
         </div>
         <div className={styles.fieldContainer}>
-          <label htmlFor="newPassword">New Password: </label>
+          <label htmlFor="password">New Password: </label>
           <input
             type="password"
-            name="newPassword"
-            id="newPassword"
-            value={newPassword}
-            onChange={(e) => setNewPassword(e.target.value)}
+            name="password"
+            id="password"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
           />
         </div>
         <div className={styles.fieldContainer}>
-          <label htmlFor="newPasswordConfirm">Confirm New Password: </label>
+          <label htmlFor="passwordConfirm">Confirm New Password: </label>
           <input
             type="password"
-            name="newPasswordConfirm"
-            id="newPasswordConfirm"
-            value={newPasswordConfirm}
-            onChange={(e) => setNewPasswordConfirm(e.target.value)}
+            name="passwordConfirm"
+            id="passwordConfirm"
+            value={passwordConfirm}
+            onChange={(e) => setPasswordConfirm(e.target.value)}
           />
         </div>
       </div>
