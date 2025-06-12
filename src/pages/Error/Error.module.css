@@ -1,3 +1,23 @@
-.heading {
-  color: green;
+.mainContainer {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  min-height: 60vh;
+}
+
+.header {
+  font-size: 70px;
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+.linkContainer {
+  display: flex;
+  gap: 30px;
+  flex-wrap: wrap;
+}
+
+.linkContainer > a {
+  font-size: 40px;
 }
