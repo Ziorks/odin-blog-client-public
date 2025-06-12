@@ -12,11 +12,12 @@ function Home() {
         {isLoading &&
           new Array(8).fill().map((_, i) => <PostPreview key={i} />)}
         {error && <p>An error occured. Try refreshing the page.</p>}
-        {data && data.posts.length > 0 ? (
-          data.posts.map((post) => <PostPreview key={post.id} post={post} />)
-        ) : (
-          <p>There doesn't seem to be any posts yet...</p>
-        )}
+        {data &&
+          (data.posts.length > 0 ? (
+            data.posts.map((post) => <PostPreview key={post.id} post={post} />)
+          ) : (
+            <p>There doesn't seem to be any posts yet...</p>
+          ))}
       </div>
     </main>
   );
