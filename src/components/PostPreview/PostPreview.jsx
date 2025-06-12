@@ -44,7 +44,7 @@ function PostPreview({ post }) {
                   className={styles.commentsLink}
                   to={`/posts/${post.id}/#comments`}
                 >
-                  {`${post._count.comments} COMMENT${post._count.comments > 1 && "S"}`}
+                  {`${post._count.comments} COMMENT${post._count.comments > 1 ? "S" : ""}`}
                 </Link>
               </li>
             )}
